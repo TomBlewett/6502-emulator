@@ -37,12 +37,12 @@ class CPU {
         bool isHalted();
     private:
         uint64_t cycles;
-        uint8_t  a;
-        uint8_t  x;
-        uint8_t  y;
+        uint8_t  accumulator;
+        uint8_t  x_reg;
+        uint8_t  y_reg;
         uint8_t  sp;
         uint16_t pc;
-        uint8_t  p;
+        uint8_t  p_status;
         void nmi();
         void irq();
         void push(uint8_t value);

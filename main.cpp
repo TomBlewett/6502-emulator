@@ -4,12 +4,12 @@
 #include "cpu.cpp"
 
 int main() {
-    // Initialise 6502, setting PC to point to 0x0200 on startup
+    // Initialise 6502, setting the program counter to point to the address 0x0200
     CPU cpu = CPU();
     cpu.bus->ram[0xFFFC] = 0x00;
     cpu.bus->ram[0xFFFD] = 0x02;
 
-    // CPU begins running
+    // CPU starts up
     cpu.restart();
 
     // Multiplies 3 x 5 via repeated addition, storing each partial product
@@ -31,7 +31,7 @@ int main() {
         0xA8,                   // $0212 TAY
         0x20, 0x25, 0x02,       // $0213 JSR $0225
         0x02,                   // $0216 STP
-        0x00, 0x00, 0x00, 0x00, // $0217..$0224 unused padding
+        0x00, 0x00, 0x00, 0x00, // $0217 -> $0224 unused padding
         0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00,
         0x00, 0x00,
@@ -49,7 +49,10 @@ int main() {
         cpu.bus->ram[loadAddr + i] = program[i];
     }
 
+    // Bool to check if its the first time the CPU is halted, so that the display message is printed once
     bool firstTime = true;
+
+    // 40 is a random arbitrary number of steps to run the CPU for
     for (int i = 0; i < 40; i++) {
         std::cout << "Step " << i + 1 << std::endl;
         std::cout << "PC value: ";

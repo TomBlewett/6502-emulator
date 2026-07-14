@@ -4,8 +4,8 @@
 enum StatusFlag : uint8_t {
     FLAG_C = 1 << 0,   // Carry
     FLAG_Z = 1 << 1,   // Zero
-    FLAG_I = 1 << 2,   // Interrupt Disable
-    FLAG_D = 1 << 3,   // Decimal Mode
+    FLAG_I = 1 << 2,   // Interrupt
+    FLAG_D = 1 << 3,   // Decimal
     FLAG_B = 1 << 4,   // Break
     FLAG_U = 1 << 5,   // Unused
     FLAG_V = 1 << 6,   // Overflow
@@ -13,12 +13,13 @@ enum StatusFlag : uint8_t {
 };
 
 struct Bus {
+    // Initialise all of the 64KB of RAM to 0x00
     uint8_t ram[65536] = {0};
 
-    // Route address to correct device, return byte
+    // Reads the 16-bit address, returns the byte at that address
     uint8_t read(uint16_t addr) { return ram[addr]; }
 
-    // Route address to correct device, write byte
+    // Writes the value byte to the 16-bit address in the RAM
     void write(uint16_t addr, uint8_t value) { ram[addr] = value; }
 };
 
@@ -26,10 +27,10 @@ class CPU {
     public:
         CPU();
         ~CPU();
+        Bus *bus;
         uint8_t returnRegister(char reg);
         uint16_t returnProgramCounter();
         int returnCycleCount();
-        Bus *bus;
         void printByte(uint8_t val);
         void printBytes(uint16_t val);
         void restart();
@@ -53,5 +54,4 @@ class CPU {
         bool halted;
         uint8_t pull();
         uint8_t fetch();
-
 };

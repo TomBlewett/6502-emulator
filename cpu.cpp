@@ -2,8 +2,6 @@
 #include <iostream>
 #include "cpu.h"
 
-
-
 CPU::CPU() : cycles(0), accumulator(0), x_reg(0), y_reg(0), sp(0xFF), pc(0x0000), p_status(0x00), halted(false) {
     bus = new Bus();
 }
@@ -49,10 +47,10 @@ int CPU::returnCycleCount() {
     return cycles;
 }
 
-// Push byte onto stack
+// Push byte onto stack, decrement stack pointer
 void CPU::push(uint8_t value) { bus->write(0x0100 + sp, value); sp--; }
 
-// Pull byte from stack
+// Increment stack pointer, pull byte from stack
 uint8_t CPU::pull() { sp++; return bus->read(0x0100 + sp); }
 
 // Set or clear a status flag
@@ -61,7 +59,7 @@ void CPU::setFlag(StatusFlag flag, bool value) {
     else       p_status &= ~flag;
 }
 
-// Reads a status flag
+// Reads any status flag
 bool CPU::getFlag(StatusFlag flag) { return (p_status & flag) != 0; }
 
 // Print bits of any byte
